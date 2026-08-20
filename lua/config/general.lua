@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = " "
 
 vim.opt.guicursor = ""
 vim.opt.nu = true
@@ -69,23 +69,23 @@ vim.api.nvim_create_autocmd("CursorHold", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
+	callback = function()
+		pcall(vim.treesitter.start)
+	end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        vim.opt_local.formatoptions:remove({ "t", "c" })
-    end,
+	callback = function()
+		vim.opt_local.formatoptions:remove({ "t", "c" })
+	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact" },
-    callback = function()
-        vim.opt_local.tabstop = 4
-        vim.opt_local.softtabstop = 4
-        vim.opt_local.shiftwidth = 4
-        vim.opt_local.expandtab = false
-    end,
+	pattern = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact" },
+	callback = function()
+		vim.opt_local.tabstop = 4
+		vim.opt_local.softtabstop = 4
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.expandtab = false
+	end,
 })

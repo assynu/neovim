@@ -13,6 +13,7 @@ vim.pack.add({
 	{ src = "https://github.com/stevearc/conform.nvim.git" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 	{ src = "https://github.com/rose-pine/neovim.git" },
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 -- Mason
@@ -71,6 +72,7 @@ _99.setup({
 -- Mini
 require("mini.comment").setup()
 require("mini.pick").setup({})
+require("mini.icons").setup()
 require("mini.completion").setup({
 	lsp_completion = {
 		source_func = "omnifunc",
@@ -84,6 +86,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
+-- Rose Pine Theme
+require("rose-pine").setup({
+	extend_background_behind_borders = true,
+	styles = {
+		bold = true,
+		italic = false,
+		transparency = true,
+	},
+})
+
 -- Conform
 
 require("conform").setup({
@@ -92,7 +104,9 @@ require("conform").setup({
 		javascript = { "prettier" },
 		typescript = { "prettier" },
 		vue = { "prettier" },
+		["_"] = { lsp_format = "fallback" },
 	},
+
 	formatters = {
 		stylua = {
 			prepend_args = {
@@ -107,16 +121,6 @@ require("conform").setup({
 		prettier = {
 			prepend_args = { "--use-tabs", "--tab-width", "4" },
 		},
-	},
-})
-
--- Rose Pine Theme
-require("rose-pine").setup({
-	extend_background_behind_borders = true,
-	styles = {
-		bold = true,
-		italic = false,
-		transparency = true,
 	},
 })
 
