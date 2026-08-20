@@ -1,25 +1,25 @@
 vim.pack.add({
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter.git" },
-	{ src = 'https://github.com/neovim/nvim-lspconfig' },
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/mason-org/mason.nvim.git" },
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim.git" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim.git" },
-	{ src = "https://github.com/ThePrimeagen/harpoon.git",           version = "harpoon2" },
-	{ src = "https://github.com/rose-pine/neovim.git" },
+	{ src = "https://github.com/ThePrimeagen/harpoon.git", version = "harpoon2" },
 	{ src = "https://github.com/assynu/fivem.nvim.git" },
 	{ src = "https://github.com/supermaven-inc/supermaven-nvim.git" },
 	{ src = "https://github.com/ThePrimeagen/99.git" },
 	{ src = "https://github.com/nvim-mini/mini.nvim.git" },
 	{ src = "https://github.com/kdheepak/lazygit.nvim.git" },
 	{ src = "https://github.com/stevearc/conform.nvim.git" },
-
+	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
+	{ src = "https://github.com/rose-pine/neovim.git" },
 })
 
 -- Mason
 require("mason").setup()
-require("mason-lspconfig").setup {
+require("mason-lspconfig").setup({
 	ensure_installed = { "lua_ls", "stylua" },
-}
+})
 
 -- Harpoon
 local harpoon = require("harpoon")
@@ -57,20 +57,20 @@ _99 = require("99")
 local basename = vim.fs.basename(vim.uv.cwd())
 
 _99.setup({
-    provider = _99.Providers.ClaudeCodeProvider,
-    logger = {
-        level = _99.DEBUG,
-        path = "/tmp/" .. basename .. ".99.debug",
-        print_on_error = true,
-    },
-    tmp_dir = "./tmp",
-    completion = { source = "native" },
-    md_files = { "AGENT.md" },
+	provider = _99.Providers.ClaudeCodeProvider,
+	logger = {
+		level = _99.DEBUG,
+		path = "/tmp/" .. basename .. ".99.debug",
+		print_on_error = true,
+	},
+	tmp_dir = vim.fn.stdpath("data") .. "/99/" .. basename,
+	completion = { source = "native" },
+	md_files = { "AGENT.md" },
 })
 
 -- Mini
-require('mini.comment').setup()
-require('mini.pick').setup({})
+require("mini.comment").setup()
+require("mini.pick").setup({})
 require("mini.completion").setup({
 	lsp_completion = {
 		source_func = "omnifunc",
@@ -78,20 +78,10 @@ require("mini.completion").setup({
 	},
 })
 
-vim.api.nvim_create_autocmd('LspAttach', {
+vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
-		vim.bo[args.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-	end
-})
-
--- Rose Pine Theme
-require("rose-pine").setup({
-	extend_background_behind_borders = true,
-	styles = {
-		bold = true,
-		italic = false,
-		transparency = true,
-	},
+		vim.bo[args.buf].omnifunc = "v:lua.MiniCompletion.completefunc_lsp"
+	end,
 })
 
 -- Conform
@@ -106,13 +96,40 @@ require("conform").setup({
 	formatters = {
 		stylua = {
 			prepend_args = {
-				"--column-width", "9999",
-				"--indent-type", "Tabs",
-				"--indent-width", "4",
+				"--column-width",
+				"9999",
+				"--indent-type",
+				"Tabs",
+				"--indent-width",
+				"4",
 			},
 		},
 		prettier = {
 			prepend_args = { "--use-tabs", "--tab-width", "4" },
 		},
 	},
+})
+
+-- Rose Pine Theme
+require("rose-pine").setup({
+	extend_background_behind_borders = true,
+	styles = {
+		bold = true,
+		italic = false,
+		transparency = true,
+	},
+})
+
+-- Gitsigns
+
+require("gitsigns").setup({
+	on_attach = function(bufnr)
+		local gs = package.loaded.gitsigns
+		local function map(mode, l, r, desc)
+			vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
+		end
+
+		-- toggle inline blame for the current line (virtual text)
+		map("n", "<leader>gb", gs.toggle_current_line_blame, "Toggle git blame line")
+	end,
 })
