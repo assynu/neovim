@@ -12,6 +12,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.nvim.git" },
 	{ src = "https://github.com/kdheepak/lazygit.nvim.git" },
 	{ src = "https://github.com/stevearc/conform.nvim.git" },
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 -- Mason
@@ -70,6 +71,7 @@ _99.setup({
 -- Mini
 require("mini.comment").setup()
 require("mini.pick").setup({})
+require("mini.icons").setup()
 require("mini.completion").setup({
 	lsp_completion = {
 		source_func = "omnifunc",
